@@ -90,6 +90,7 @@
     krew
     kubectl
     nixpkgs-fmt
+    openstackclient
     starship
   ];
 }
