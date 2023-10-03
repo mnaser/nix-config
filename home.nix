@@ -91,6 +91,7 @@
     kubectl
     nixpkgs-fmt
     openstackclient
+    procps
     starship
   ];
 }
