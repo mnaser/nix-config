@@ -14,7 +14,7 @@
       configuration = { pkgs, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
-        environment.systemPackages = [];
+        environment.systemPackages = [ ];
 
         # Auto upgrade nix package and the daemon service.
         services.nix-daemon.enable = true;
@@ -36,6 +36,17 @@
 
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
+
+        # fonts to install
+        fonts = {
+          fontDir.enable = true;
+          fonts = [
+            # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/nerdfonts/shas.nix
+            (pkgs.nerdfonts.override {
+              fonts = [ "CascadiaCode" "IBMPlexMono" ];
+            })
+          ];
+        };
 
         homebrew = {
           enable = true;

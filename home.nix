@@ -19,6 +19,15 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  xdg.configFile = {
+    "alacritty/catppuccin" = {
+      source = builtins.fetchGit {
+        url = "https://github.com/catppuccin/alacritty.git";
+        rev = "3c808cbb4f9c87be43ba5241bc57373c793d2f17";
+      };
+    };
+  };
+
   programs.git = {
     enable = true;
 
@@ -60,16 +69,55 @@
     enableAliases = true;
   };
 
+  programs.bat = {
+    enable = true;
+  };
+
+  programs.tmux = {
+    enable = true;
+    terminal = "xterm-256color";
+    baseIndex = 1;
+    keyMode = "vi";
+    mouse = true;
+
+    plugins = with pkgs.tmuxPlugins; [
+      vim-tmux-navigator
+
+      {
+      	plugin = catppuccin;
+	extraConfig = ''
+	  set -g @catppuccin_window_default_text "#W"
+          set -g @catppuccin_window_current_text "#W"
+	'';
+      }
+    ];
+
+    extraConfig = ''
+      set -ga terminal-overrides ",xterm-256color:Tc"
+    '';
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
+
+    plugins = with pkgs.vimPlugins; [
+      vim-tmux-navigator
+    ];
+
+    extraLuaConfig = ''
+      vim.opt.termguicolors = true
+    '';
   };
 
   programs.fzf = {
     enable = true;
+    tmux = {
+      enableShellIntegration = true;
+    };
   };
 
   programs.zoxide = {
@@ -86,12 +134,27 @@
     enable = true;
   };
 
+  programs.alacritty = {
+    enable = true;
+
+    settings = {
+      import = [
+        "~/.config/alacritty/catppuccin/catppuccin-mocha.yml"
+      ];
+
+      font.normal.family = "CaskaydiaCove Nerd Font";
+      font.size = 14;
+    };
+  };
+
   home.packages = with pkgs; [
+    alacritty
     krew
     kubectl
     nixpkgs-fmt
     openstackclient
     procps
     starship
+    youtube-dl
   ];
 }
