@@ -97,20 +97,53 @@
     '';
   };
 
-  programs.neovim = {
+  programs.nixvim = {
     enable = true;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
-    vimdiffAlias = true;
 
-    plugins = with pkgs.vimPlugins; [
-      vim-tmux-navigator
+    options = {
+      number = true;
+    };
+
+    colorschemes.catppuccin = {
+      enable = true;
+    };
+
+    plugins.lastplace = {
+      enable = true;
+    };
+
+    plugins.tmux-navigator = {
+      enable = true;
+    };
+
+    plugins.copilot = {
+      enable = true;
+    };
+
+    plugins.gitgutter = {
+      enable = true;
+    };
+
+    plugins.lsp = {
+      enable = true;
+
+      servers = {
+        nixd = {
+	  enable = true;
+        };
+      };
+    };
+
+    globals = {
+      better_whitespace_guicolor = "#f38ba8";
+    };
+
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-better-whitespace
     ];
-
-    extraLuaConfig = ''
-      vim.opt.termguicolors = true
-    '';
   };
 
   programs.fzf = {
