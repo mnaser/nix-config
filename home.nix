@@ -119,30 +119,75 @@
       enable = true;
     };
 
-    plugins.copilot = {
+    plugins.gitgutter = {
       enable = true;
     };
 
-    plugins.gitgutter = {
+    plugins.cursorline = {
       enable = true;
+    };
+
+    plugins.treesitter = {
+      enable = true;
+    };
+
+    plugins.project-nvim = {
+      enable = true;
+    };
+
+    plugins.telescope = {
+      enable = true;
+
+      extensions.fzf-native = {
+	enable = true;
+      };
+
+      keymaps = {
+      	"<C-p>" = "find_files";
+      };
     };
 
     plugins.lsp = {
       enable = true;
 
       servers = {
-        nixd = {
-	  enable = true;
-        };
+	gopls.enable = true;
+	pyright.enable = true;
+        nixd.enable = true;
       };
+    };
+
+    plugins.copilot-lua = {
+      enable = true;
+    };
+
+    plugins.nvim-cmp = {
+      enable = true;
+
+      mappingPresets = [ "insert" "cmdline" ];
+      mapping = {
+      	"<C-Space>" = "cmp.mapping.complete()";
+	"<CR>" = "cmp.mapping.confirm({ select = false })";
+      };
+
+      sources = [
+	{ name = "copilot"; }
+	{ name = "nvim_lsp"; }
+      ];
+    };
+
+    plugins.copilot-cmp = {
+      enable = true;
     };
 
     globals = {
       better_whitespace_guicolor = "#f38ba8";
+      go_fmt_command = "goimports";
     };
 
     extraPlugins = with pkgs.vimPlugins; [
       vim-better-whitespace
+      vim-go
     ];
   };
 
@@ -182,11 +227,20 @@
 
   home.packages = with pkgs; [
     alacritty
+    fd
+    git-review
+    jq
     krew
     kubectl
+    kubernetes-helm
     nixpkgs-fmt
     openstackclient
+    patchutils
+    poetry
     procps
+    pwgen
+    ripgrep
+    sops
     starship
     youtube-dl
   ];
