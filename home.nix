@@ -227,6 +227,7 @@
 
   home.packages = with pkgs; [
     alacritty
+    coreutils
     fd
     git-review
     jq
