@@ -240,6 +240,7 @@
     poetry
     procps
     pwgen
+    python311Packages.tox
     ripgrep
     sops
     starship
