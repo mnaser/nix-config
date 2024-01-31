@@ -3,16 +3,32 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    flake-utils.url = "github:numtide/flake-utils";
+
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim.inputs.nix-darwin.follows = "home-manager";
+    nixvim.inputs.home-manager.follows = "home-manager";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, nixvim, ... }:
+  outputs = inputs@{ self, nix-darwin, flake-utils, nixpkgs, home-manager, nixvim, ... }:
     let
+      pkgsForSystem = system: import nixpkgs {
+        inherit system;
+
+        config.allowUnfree = true;
+        overlays = [
+          (import ./overlays/black.nix)
+        ];
+      };
+
       configuration = { pkgs, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
@@ -130,6 +146,8 @@
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#AMG
       darwinConfigurations."AMG" = nix-darwin.lib.darwinSystem {
+        pkgs = pkgsForSystem flake-utils.lib.system.aarch64-darwin;
+
         modules = [
           configuration
           home-manager.darwinModules.home-manager
@@ -154,9 +172,7 @@
       # home-manager switch --flake .#devbox
       homeConfigurations = {
         ubuntu = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-          };
+          pkgs = pkgsForSystem flake-utils.lib.system.x86_64-linux;
 
           modules = [
             ./systems/ubuntu.nix
