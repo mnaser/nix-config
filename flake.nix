@@ -95,9 +95,6 @@
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
         nixpkgs.config.allowUnfree = true;
-        nixpkgs.overlays = [
-          (import ./overlays/black.nix)
-        ];
 
         # fonts to install
         fonts = {
@@ -159,9 +156,6 @@
         ubuntu = home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             system = "x86_64-linux";
-            overlays = [
-              (import ./overlays/black.nix)
-            ];
           };
 
           modules = [

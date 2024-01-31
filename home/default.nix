@@ -3,6 +3,10 @@
 {
   home.stateVersion = "23.05";
 
+  nixpkgs.overlays = [
+    (import ../overlays/black.nix)
+  ];
+
   programs.home-manager.enable = true;
   programs.git = import ./programs/git.nix;
   programs.starship = import ./programs/starship.nix;
