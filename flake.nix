@@ -154,7 +154,6 @@
       # home-manager switch --flake .#devbox
       homeConfigurations = {
         ubuntu = home-manager.lib.homeManagerConfiguration {
-          home = "/home/ubuntu";
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
           modules = [
