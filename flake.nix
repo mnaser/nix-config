@@ -153,10 +153,10 @@
 
       # home-manager switch --flake .#devbox
       homeConfigurations = {
-        devbox = home-manager.lib.homeManagerConfiguration {
+        ubuntu = home-manager.lib.homeManagerConfiguration {
           home = "/home/ubuntu";
           modules = [
-            ./systems/devbox.nix
+            ./systems/ubuntu.nix
             ./home/default.nix
             nixvim.homeManagerModules.nixvim
           ];
