@@ -22,6 +22,62 @@
         services.nix-daemon.enable = true;
         # nix.package = pkgs.nix;
 
+        # Operating system
+        system.defaults.NSGlobalDomain.AppleInterfaceStyle = "Dark";
+        system.defaults.NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = false;
+
+        # yabai
+        # system.defaults.spaces.spans-displays = false;
+        # system.defaults.dock.mru-spaces = false;
+
+        # services.yabai = {
+        #   enable = true;
+
+        #   config = {
+        #     layout = "bsp";
+        #     window_placement = "second_child";
+        #     window_gap = 8;
+        #     top_padding = 8;
+        #     bottom_padding = 8;
+        #     left_padding = 8;
+        #     right_padding = 8;
+        #     mouse_follows_focus = true;
+        #   };
+
+        #   extraConfig = ''
+        #     yabai -m rule --add app="^Harvest$" manage=off
+        #     yabai -m rule --add app="^Microsoft To Do$" manage=off
+
+        #     yabai -m space 1 --label web
+        #     # yabai -m rule --add app="^Microsoft Edge$" space=web
+
+        #     yabai -m space 2 --label terminal
+        #     yabai -m rule --add app="^iTerm2$" space=terminal
+
+        #     yabai -m space 3 --label code
+        #     yabai -m rule --add app="^Visual Studio Code$" space=code
+
+        #     yabai -m space 4 --label work-comms
+        #     yabai -m rule --add app="^Slack$" space=work-comms
+        #     yabai -m rule --add app="^Microsoft Teams.*$" space=work-comms
+        #     yabai -m rule --add app="^Microsoft Outlook$" space=work-comms
+
+        #     yabai -m space 5 --label personal-comms
+        #     yabai -m rule --add app="^Messages$" space=personal-comms
+        #     yabai -m rule --add app="^Discord$" space=personal-comms
+
+        #     yabai -m space 6 --label music
+        #     yabai -m rule --add app="^Spotify$" space=music
+        #     yabai -m rule --add app="^Music$" space=music
+        #   '';
+        # };
+
+        # # skhd
+        # services.skhd.enable = true;
+        # services.skhd.skhdConfig = ''
+        #   cmd + alt + ctrl - t : open -a "Microsoft To Do"
+        # '';
+
         # Necessary for using flakes on this system.
         nix.settings.experimental-features = "nix-command flakes";
 
@@ -38,14 +94,17 @@
 
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
+        nixpkgs.config.allowUnfree = true;
 
         # fonts to install
         fonts = {
           fontDir.enable = true;
           fonts = [
+            pkgs.inter
+            pkgs.fira-code
             # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/nerdfonts/shas.nix
             (pkgs.nerdfonts.override {
-              fonts = [ "CascadiaCode" "IBMPlexMono" ];
+              fonts = [ "FiraCode" "CascadiaCode" "IBMPlexMono" ];
             })
           ];
         };
@@ -78,16 +137,30 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.mnaser = {
-	      imports = [
-	        ./home.nix
-		nixvim.homeManagerModules.nixvim
-	      ];
-	    };
+              imports = [
+                ./systems/amg.nix
+                ./home/default.nix
+                ./home/gui.nix
+                nixvim.homeManagerModules.nixvim
+              ];
+            };
 
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
           }
         ];
+      };
+
+      # home-manager switch --flake .#devbox
+      homeConfigurations = {
+        devbox = home-manager.lib.homeManagerConfiguration {
+          home = "/home/ubuntu";
+          modules = [
+            ./systems/devbox.nix
+            ./home/default.nix
+            nixvim.homeManagerModules.nixvim
+          ];
+        };
       };
 
       # Expose the package set, including overlays, for convenience.
