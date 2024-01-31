@@ -1,8 +1,8 @@
 ## Bootstrapping a box
 
 ```
+# Install Nix and re-login
 sh <(curl -L https://nixos.org/nix/install) --daemon
-# relogin
 
 # Setup Nix with Flakes
 mkdir -p ~/.config/nix
@@ -13,3 +13,5 @@ nix-shell -p home-manager
 git clone https://github.com/mnaser/nix-config.git
 home-manager switch --flake nix-config
 ```
+
+Voila!  You now have a fully configured environment.
