@@ -155,6 +155,8 @@
       homeConfigurations = {
         ubuntu = home-manager.lib.homeManagerConfiguration {
           home = "/home/ubuntu";
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+
           modules = [
             ./systems/ubuntu.nix
             ./home/default.nix
