@@ -95,6 +95,9 @@
         # The platform the configuration will be used on.
         nixpkgs.hostPlatform = "aarch64-darwin";
         nixpkgs.config.allowUnfree = true;
+        nixpkgs.overlays = [
+          (import ./overlays/black.nix)
+        ];
 
         # fonts to install
         fonts = {
@@ -154,7 +157,12 @@
       # home-manager switch --flake .#devbox
       homeConfigurations = {
         ubuntu = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            overlays = [
+              (import ./overlays/black.nix)
+            ];
+          };
 
           modules = [
             ./systems/ubuntu.nix

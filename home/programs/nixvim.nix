@@ -26,7 +26,7 @@
     }
     {
       mode = "n";
-      key = "<leader>f";
+      key = "<leader>gf";
       action = "<Cmd>lua vim.lsp.buf.format()<CR>";
       options = {
         desc = "Format";
@@ -61,7 +61,13 @@
     debug = true;
 
     sources = {
-      diagnostics = { };
+      diagnostics = {
+        flake8.enable = true;
+      };
+      formatting = {
+        black.enable = true;
+        isort.enable = true;
+      };
     };
   };
 
