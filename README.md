@@ -11,7 +11,7 @@ echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 # Install profile
 nix-shell -p home-manager
 git clone https://github.com/mnaser/nix-config.git
-home-manager switch --flake nix-config
+home-manager switch --flake nix-config/
 usermod -s /home/ubuntu/.nix-profile/bin/zsh $USER
 ```
 
