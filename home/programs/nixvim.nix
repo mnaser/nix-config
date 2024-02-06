@@ -1,12 +1,25 @@
 { pkgs }:
 
-{
+let
+  earthly-vim = pkgs.vimUtils.buildVimPlugin {
+    name = "earthly.vim";
+    src = pkgs.fetchFromGitHub {
+      owner = "earthly";
+      repo = "earthly.vim";
+      rev = "66bf86d8292d71e6f2f5e8ea371471c9809efde6";
+      sha256 = "sha256-ufvJd1WmMwcG9LgVtjdB4ipXwjVZMhKtrQl2+H2aIL4=";
+    };
+  };
+
+in {
   enable = true;
   defaultEditor = true;
   viAlias = true;
   vimAlias = true;
 
   options = {
+    list = true;
+    listchars = "eol:¬,space:·,lead:\ ,trail:·,nbsp:◇,tab:→-,extends:▸,precedes:◂,multispace:···⬝,leadmultispace:\│\ \ \ ,";
     relativenumber = true;
     signcolumn = "yes";
   };
@@ -41,7 +54,9 @@
   ];
 
   extraPlugins = with pkgs.vimPlugins; [
+    Jenkinsfile-vim-syntax
     ansible-vim
+    earthly-vim
     vim-better-whitespace
     vim-helm
     vim-sort-motion
