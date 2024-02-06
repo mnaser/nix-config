@@ -21,6 +21,10 @@
   programs.gh = import ./programs/gh.nix;
   programs.ripgrep = import ./programs/ripgrep.nix;
 
+  home.packages = with pkgs; [
+    teleport
+  ];
+
   # home.packages = with pkgs; [
   #   coreutils
   #   dive
